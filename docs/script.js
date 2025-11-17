@@ -1,4 +1,4 @@
-const socket = io(); //create instance of websocket
+const socket = io("https://lab-collaborative.onrender.com"); //create instance of websocket
 const canvas = document.getElementById("board"); //store the canvas element
 const ctx = canvas.getContext("2d"); //instance of the canvas and set it to 2D dimensions
 
