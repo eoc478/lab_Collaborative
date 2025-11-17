@@ -35,11 +35,11 @@ function drawLine(x1, y1, x2, y2, emit) {
 //when socket receives "draw" event, it passes the JSON data to our drawLine function
 socket.on("draw", ({ x1, y1, x2, y2 }) => drawLine(x1, y1, x2, y2, false));
 
-const clearButton = document.getElementById("clear");
-clearButton.addEventListener("click", () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  socket.emit("clear");
-});
+// const clearButton = document.getElementById("clear");
+// clearButton.addEventListener("click", () => {
+//   ctx.clearRect(0, 0, canvas.width, canvas.height);
+//   socket.emit("clear");
+// });
 
 socket.on("clear", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
