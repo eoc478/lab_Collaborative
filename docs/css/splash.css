@@ -1,0 +1,19 @@
+.splashContainer{
+  cursor : pointer;
+  position : fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(220, 240, 208, 0.14);
+  transition : all ease-in-out 600ms;
+
+  display: flex;
+  flex-direction: column;
+  justify-content:flex-start;
+  align-items: center;
+
+  z-index: 10;
+}
+.hidden{
+  transition : 0.5s;
+  display : none;
+}

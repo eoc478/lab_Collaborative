@@ -1,9 +1,11 @@
 const socket = io("https://lab-collaborative.onrender.com"); //create instance of websocket
-const canvas = document.getElementById("board"); //store the canvas element
+const canvas = document.getElementById("canvas"); //store the canvas element
 const ctx = canvas.getContext("2d"); //instance of the canvas and set it to 2D dimensions
 
 let drawing = false;
 let lastX, lastY;
+let p1;
+let p2;
 
 //when the user is clicking, they are drawing
 canvas.addEventListener("mousedown", (e) => {
@@ -13,7 +15,7 @@ canvas.addEventListener("mousedown", (e) => {
 
 canvas.addEventListener("mouseup", () => (drawing = false)); 
 
-//if the user is clicking down on the mouse, use the drawLien feature between last poitn adn current point
+//if the user is clicking down on the mouse, use the drawLine feature between last point and current point
 canvas.addEventListener("mousemove", (e) => {
   if (!drawing) return;
   const [x, y] = [e.offsetX, e.offsetY];
