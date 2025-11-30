@@ -1,49 +1,69 @@
-const socket = io("https://lab-collaborative.onrender.com"); //create instance of websocket
-const canvas = document.getElementById("canvas"); //store the canvas element
-const ctx = canvas.getContext("2d"); //instance of the canvas and set it to 2D dimensions
+const socket = io("https://lab-collaborative.onrender.com");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-let drawing = false;
-let lastX, lastY;
-let p1;
-let p2;
 
-//when the user is clicking, they are drawing
-canvas.addEventListener("mousedown", (e) => {
-  drawing = true;
-  [lastX, lastY] = [e.offsetX, e.offsetY]; //take last X point and create a new offset
+canvas.width = 600;
+canvas.height = 400;
+
+ctx.strokeStyle = "#302f2fea";
+ctx.lineWidth = 2;
+ctx.lineCap = "round";
+
+let cursorX = 300;
+let cursorY = 200;
+
+const moveAmount = 5; //pixel amount when moving
+
+
+document.addEventListener("keydown", (e) => {
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+        return;
+    }
+    
+    e.preventDefault(); // prevent page from scrolling
+    
+    // storing old position
+    const oldX = cursorX;
+    const oldY = cursorY;
+    
+    // Update cursor position based on which arrow key was pressed
+    if (e.key === "ArrowLeft") {
+        cursorX = Math.max(0, cursorX - moveAmount); // Don't go past left edge
+    } else if (e.key === "ArrowRight") {
+        cursorX = Math.min(canvas.width, cursorX + moveAmount); // Don't go past right edge
+    } else if (e.key === "ArrowUp") {
+        cursorY = Math.max(0, cursorY - moveAmount); // Don't go past top edge
+    } else if (e.key === "ArrowDown") {
+        cursorY = Math.min(canvas.height, cursorY + moveAmount); // Don't go past bottom edge
+    }
+    
+    // Draw a line from old position to new position
+    drawLine(oldX, oldY, cursorX, cursorY, true);
 });
 
-canvas.addEventListener("mouseup", () => (drawing = false)); 
-
-//if the user is clicking down on the mouse, use the drawLine feature between last point and current point
-canvas.addEventListener("mousemove", (e) => {
-  if (!drawing) return;
-  const [x, y] = [e.offsetX, e.offsetY];
-  drawLine(lastX, lastY, x, y, true);
-  [lastX, lastY] = [x, y];
-});
-
-//canvas methods
+// Draw line on canvas
 function drawLine(x1, y1, x2, y2, emit) {
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.stroke();
-
-  //socket emits our draing data as a JSON object, sending out a signal that someone is drawing and send the data on all the lines drawn
-  if (emit) socket.emit("draw", { x1, y1, x2, y2 });
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    
+    // Send drawing data to server so other players can see it
+    if (emit) {
+        socket.emit("draw", { x1, y1, x2, y2 });
+    }
 }
 
-//when socket receives "draw" event, it passes the JSON data to our drawLine function
-socket.on("draw", ({ x1, y1, x2, y2 }) => drawLine(x1, y1, x2, y2, false));
-
-// const clearButton = document.getElementById("clear");
-// clearButton.addEventListener("click", () => {
-//   ctx.clearRect(0, 0, canvas.width, canvas.height);
-//   socket.emit("clear");
-// });
-
-socket.on("clear", () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Receive drawing data from other players
+socket.on("draw", ({ x1, y1, x2, y2 }) => {
+    drawLine(x1, y1, x2, y2, false);
 });
 
+// Clear the canvas
+socket.on("clear", () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Reset cursor to center
+    cursorX = 300;
+    cursorY = 200;
+});
