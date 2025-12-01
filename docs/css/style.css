@@ -45,6 +45,20 @@ body, html{
    
 }
 
+.btn{
+  background-color: rgb(47, 46, 46);
+  border: none;
+  border-radius: 18px;
+  font-family: "Gamja Flower";
+  color: rgb(249, 248, 202);
+  text-align: center;
+  text-decoration: none;
+  font-size: 2vh;
+  cursor: pointer;
+
+  animation: shake 2s infinite;
+}
+
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }

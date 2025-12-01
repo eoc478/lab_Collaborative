@@ -6,16 +6,26 @@
     <title>etch-a-sketch!</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/splash.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dokdo&family=Gamja+Flower&display=swap" rel="stylesheet">
 </head>
 <body>
 
      <div class="splashContainer">
-        <h1 class="splashHeader">Etch-a-Sketch</h1>
-        <p class="splashP1">This is a two-player game! Invite a friend to start drawing on the etch-a-sketch. P1 draws left and right, P2 draws up and down. Shake both of your mouses at the same time to clear the sketch.</p>
-        <p class="splashP">waiting for players...</p>
-        <p id="whichPlayer" class="whichPlayer">You are: </p>
-
+        <h1 class="splashHeader">etch-a-sketch</h1>
+        <div class="intro">
+            <p class="splashP1">This is a two-player collaboration game. Work together to create a masterpiece!</p>
+            <p class="splashP1">Invite a friend to start drawing on the etch-a-sketch. P1 draws left and right, P2 draws up and down. Click the button to shake and erase the drawing.</p>
+        </div>
+        <div class="socketSplash">
+            <p id="splashP" class="splashP"></p>
+            <p id="whichPlayer" class="whichPlayer"></p>
+            <p id="directions" class="directions"></p>
+        </div>
      </div>
+
      <div class="container">
         <img src="./assets/etchasketch.png" class="etchImg">
         <div class="canvasContainer">

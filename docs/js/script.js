@@ -20,19 +20,33 @@ let totalClicks = 0;
 let shake = false;
 const shakeBtn = document.getElementById("btn");
 
+let whichPlayer = document.getElementById("whichPlayer");
+let directions = document.getElementById("directions");
+let splashP = document.getElementById("splashP");
+
 socket.on("playerAssignment", (data) => {
     playerNumber = data.playerNumber;
     console.log(`You are Player ${playerNumber}`);
     
     if (playerNumber === 1) {
-        console.log("You control: LEFT and RIGHT arrows");
+        console.log("player 1 LEFT AND RIGHT");
+        whichPlayer.textContent = `You are Player ${playerNumber}`
+        directions.textContent = `Use the LEFT and RIGHT arrow keys to draw`
     } else {
-        console.log("You control: UP and DOWN arrows");
+        console.log("player 2 UP AND DOWN");
+        whichPlayer.textContent = `You are Player ${playerNumber}`
+        directions.textContent = `Use the UP and DOWN arrow keys to draw`
     }
 });
 
 socket.on("playerCount", (count) => {
     console.log(`Total players connected: ${count}`);
+    if (count === 2 ){
+        console.log("max players");
+        splashP.textContent = "players found! click anywhere to continue"
+    } else{
+        splashP.textContent = "waiting for players..."
+    }
 });
 
 
