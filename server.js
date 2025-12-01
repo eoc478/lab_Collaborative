@@ -14,12 +14,39 @@ const io = new Server(server, {
     origin: "*",             // you can restrict this later
     methods: ["GET", "POST"]
   }
-});
+}); // bring this back for Render
 
 app.use(express.static("docs")); //tells our server to use the public folder to serve our files (index.html, style.css, script.js);
 
+
+//-------------------------------socket stuff--------------------------------------
+let players = [];
+
 io.on("connection", (socket) => {
     console.log("User connected: " + socket.id);
+
+    let playerNumber;
+        if (players.length === 0) {
+        playerNumber = 1;
+        players.push({ id: socket.id, number: 1 });
+        console.log("Player 1 joined");
+    } else if (players.length === 1) {
+        playerNumber = 2;
+        players.push({ id: socket.id, number: 2 });
+        console.log("Player 2 joined");
+    } else {
+        // Game is full
+        console.log("Game full - rejecting connection");
+        socket.emit("gameFull");
+        socket.disconnect();
+        return;
+    }
+
+    // Send player number to the client
+    socket.emit("playerAssignment", { playerNumber });
+    
+    // Notify all clients about current player count
+    io.emit("playerCount", players.length);
     
     //notice a draw input on our client, then broadcast message to everyone else connected that there is a "draw" signal and pass the data
     socket.on("draw", (data) => {
@@ -27,7 +54,12 @@ io.on("connection", (socket) => {
     })
 
     socket.on("disconnect", () => {
-        console.log("User disconnected UPDATE: " + socket.id);
+        console.log("User disconnected: " + socket.id);
+        
+        players = players.filter(player => player.id !== socket.id);
+        console.log(`Players remaining: ${players.length}`);
+        // Notify remaining clients
+        io.emit("playerCount", players.length);
     })
 });
 

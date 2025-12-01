@@ -5,3 +5,5 @@ splashScreen.addEventListener('click',()=>{
     splashScreen.classList.add('hidden')
   },610)
 })
+
+let p1Text = document.getElementById("p1");
