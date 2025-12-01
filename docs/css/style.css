@@ -5,14 +5,20 @@ body, html{
 
 .container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
     width: 100vw;
-    height: auto;
-    margin-top: 5vh;
+    height: 100vh;
+    /* margin-top: 5vh; */
 }
 
+.buttonContainer{
+    display: flex;
+    flex-direction: column;
+    padding-top: 2vh;
+}
 
 .etchImg{
     width: 50vw;
@@ -27,7 +33,7 @@ body, html{
     justify-content: center;
     align-items: center;;
     z-index: 1;
-    margin-bottom: 2vh;
+    padding-bottom: 5vh;
 }
 
 .EASCanvas{
@@ -35,21 +41,16 @@ body, html{
     width: 36%;
     height: auto;
     border-radius: 2vw;
-    background-color: rgba(0, 255, 247, 0);
+    background-color: rgb(224, 212, 215, 0);
    
 }
 
-.p1, .p2{
-    position: absolute;
-    z-index: 2;
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
 }
 
-.p1{
-    top: 80%;
-    left: 25%;
-}
-
-.p2{
-    top: 80%;
-    right: 25%
+.shaking {
+    animation: shake .5s infinite;
 }

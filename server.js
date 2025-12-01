@@ -45,13 +45,19 @@ io.on("connection", (socket) => {
     // Send player number to the client
     socket.emit("playerAssignment", { playerNumber });
     
-    // Notify all clients about current player count
+    // tell clients about player count
     io.emit("playerCount", players.length);
     
     //notice a draw input on our client, then broadcast message to everyone else connected that there is a "draw" signal and pass the data
     socket.on("draw", (data) => {
         socket.broadcast.emit("draw", data);
     })
+
+      socket.on("clear", () => {
+        console.log(`Player ${playerNumber} clicked shake button`);
+        // Tell ALL players (including the one who clicked) to shake and clear
+        io.emit("shakeClear");
+    });
 
     socket.on("disconnect", () => {
         console.log("User disconnected: " + socket.id);

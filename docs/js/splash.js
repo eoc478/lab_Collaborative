@@ -6,4 +6,3 @@ splashScreen.addEventListener('click',()=>{
   },610)
 })
 
-let p1Text = document.getElementById("p1");

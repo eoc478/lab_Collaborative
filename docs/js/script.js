@@ -16,6 +16,10 @@ const moveAmount = 5; //pixel amount when moving
 
 let playerNumber = null;
 
+let totalClicks = 0;
+let shake = false;
+const shakeBtn = document.getElementById("btn");
+
 socket.on("playerAssignment", (data) => {
     playerNumber = data.playerNumber;
     console.log(`You are Player ${playerNumber}`);
@@ -81,10 +85,40 @@ socket.on("draw", ({ x1, y1, x2, y2 }) => {
     cursorY = y2;
 });
 
-// Clear the canvas
-socket.on("clear", () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Reset cursor to center
-    cursorX = 300;
-    cursorY = 200;
+shakeBtn.addEventListener("click", () => {
+    socket.emit("clear");
+});
+
+socket.on("shakeClear", () => {
+    const container = document.querySelector(".container");
+    
+    container.classList.add("shaking");
+    
+    const totalDuration = 3000; 
+    const fadeSteps = 30; // how many steps it takes to fade away
+    const intervalTime = totalDuration / fadeSteps; // 50ms per step
+    
+    let currentStep = 0;
+    
+    const fadeInterval = setInterval(() => {
+        currentStep++;
+        
+        // Paint a semi-transparent white rectangle to gradually fade the drawing
+        ctx.fillStyle = `rgba(224, 212, 215, ${1 / fadeSteps})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // When we've completed all fade steps
+        if (currentStep >= fadeSteps) {
+            clearInterval(fadeInterval);
+            //clear the rectangle
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            cursorX = 300;
+            cursorY = 200;
+        }
+    }, intervalTime); // Run every 50ms
+    
+    // Remove shake animation after 3 seconds (same as fade duration)
+    setTimeout(() => {
+        container.classList.remove("shaking");
+    }, totalDuration);
 });
